@@ -1,0 +1,192 @@
+openapi: 3.0.3
+
+info:
+    version: 1.0.0
+    title: Graph API
+    description: API to interact with graph
+
+paths:
+    /v1/path:
+        get:
+            summary: Get fastest path from start to finish
+            parameters:
+                -   name: Courier
+                    in: query
+                    required: true
+                    schema:
+                        $ref: '#/components/schemas/Courier'
+            responses:
+                '200':
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PathInfo'
+                '400':
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    description: Coordinate out of map
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '406':
+                    description: Not reachable from point destination
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '413':
+                    description: Payload Too Large
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                                
+    /v1/path/multiple-couriers:
+        get:
+            summary: Get fastest path from multiple couriers to finish
+            parameters:
+                -   name: Couriers
+                    in: query
+                    required: true
+                    schema:
+                        type: array
+                        description: Identifier for order
+                        items:
+                            $ref: '#/components/schemas/Courier'
+
+            responses:
+                '200':
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PathInfo'
+                '400':
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    description: Coordinate out of map
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '406':
+                    description: Not reachable from points destination
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '413':
+                    description: Payload Too Large
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+
+    /v1/point/is-available:
+        get:
+            summary: Is point available for pathfinding
+            parameters:
+                -   name: Coordinate
+                    in: query
+                    required: true
+                    schema:
+                        $ref: '#/components/schemas/Coordinate'
+
+            responses:
+                '200':
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PointAvailableResponse'
+                '413':
+                    description: Payload Too Large
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+    schemas:
+        Coordinate:
+            type: object
+            properties:
+                lon:
+                    type: number
+                    maximum: 180
+                    minimum: -180
+                    description: City geographic location (longitude)
+
+                lat:
+                    type: number
+                    maximum: 90
+                    minimum: -90
+                    description: City geographic location (latitude)
+            required:
+                - lon
+                - lat
+
+        Courier:
+            type: object
+            properties:
+                id:
+                  type: integer
+                  description: Courier ID
+                position:
+                    $ref: '#/components/schemas/Coordinate'
+            required:
+                - id
+                - position
+
+        PathInfo:
+            type: object
+            properties:
+                courier-id:
+                  type: integer
+                  description: Courier ID
+                path:
+                    type: array
+                    description: Path is array coordinates
+                    items:
+                        $ref: '#/components/schemas/Coordinate'
+                time:
+                    type: integer
+                    minimum: 0
+                    example: 300
+                    description: Time in seconds
+                cost:
+                    type: number
+                    format: float
+                    minimum: 0
+                    example: 100.05
+                    description: Cost of travel in rubles
+            required:
+                - courier-id
+                - path
+                - time
+                - cost
+        
+        PointAvailableResponse:
+            type: object
+            properties:
+                available:
+                    type: boolean
+                    example: true
+
+        ErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+            required:
+                - message
