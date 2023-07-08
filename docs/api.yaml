@@ -88,7 +88,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
 
-    /v1/path/multiple-couriers:
+    /v1/path/multiple_couriers:
         post:
             summary: Get fastest path from multiple couriers to finish
             requestBody:
@@ -129,7 +129,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
 
-    /v1/point/is-available:
+    /v1/point/is_available:
         post:
             summary: Is point available for pathfinding
             requestBody:
@@ -159,18 +159,18 @@ components:
             properties:
                 courier:
                     $ref: '#/components/schemas/Courier'
-                end-coordinate:
+                end_coordinate:
                     $ref: '#/components/schemas/Coordinate'
             required:
                 - courier
-                - end-coordinate
+                - end_coordinate
 
         V2PathRequest:
             type: object
             properties:
                 courier:
                     $ref: '#/components/schemas/Courier'
-                end-coordinate:
+                end_coordinate:
                     $ref: '#/components/schemas/Coordinate'
                 time:
                     type: string
@@ -178,7 +178,7 @@ components:
                     description: Time in format HH:MM:SS
             required:
                 - courier
-                - end-coordinate
+                - end_coordinate
                 - time
 
         PathMultipleStartRequest:
@@ -189,11 +189,11 @@ components:
                     description: Identifier for order
                     items:
                         $ref: '#/components/schemas/Courier'
-                end-coordinate:
+                end_coordinate:
                     $ref: '#/components/schemas/Coordinate'
             required:
                 - couriers
-                - end-coordinate
+                - end_coordinate
 
         Coordinate:
             type: object
@@ -229,7 +229,7 @@ components:
         PathInfo:
             type: object
             properties:
-                courier-id:
+                courier_id:
                     type: integer
                     description: Courier ID
                 path:
@@ -249,7 +249,7 @@ components:
                     example: 100.05
                     description: Cost of travel in rubles
             required:
-                - courier-id
+                - courier_id
                 - path
                 - time
                 - cost
