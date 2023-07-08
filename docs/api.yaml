@@ -46,6 +46,46 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
+    /v2/path:
+        get:
+            summary: Get fastest path from start to finish, cost depends on time
+            parameters:
+                -   name: Courier
+                    in: query
+                    required: true
+                    schema:
+                        $ref: '#/components/schemas/V2PathRequest'
+            responses:
+                '200':
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PathInfo'
+                '400':
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    description: Coordinate out of map
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '406':
+                    description: Not reachable from point destination
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '413':
+                    description: Payload Too Large
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
                                 
     /v1/path/multiple-couriers:
         get:
@@ -125,6 +165,21 @@ components:
             required:
                 - courier
                 - end-coordinate
+        V2PathRequest:
+            type: object
+            properties:
+                courier:
+                  $ref: '#/components/schemas/Courier'
+                end-coordinate:
+                  $ref: '#/components/schemas/Coordinate'
+                time:
+                    type: string
+                    example: HH:MM:SS
+                    description: Time in format HH:MM:SS
+            required:
+                - courier
+                - end-coordinate
+                - time
         PathMultipleStartRequest:
             type: object
             properties:
