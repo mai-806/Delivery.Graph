@@ -14,7 +14,7 @@ paths:
                     in: query
                     required: true
                     schema:
-                        $ref: '#/components/schemas/Courier'
+                        $ref: '#/components/schemas/PathRequest'
             responses:
                 '200':
                     description: Successful response
@@ -55,10 +55,7 @@ paths:
                     in: query
                     required: true
                     schema:
-                        type: array
-                        description: Identifier for order
-                        items:
-                            $ref: '#/components/schemas/Courier'
+                        $ref: '#/components/schemas/PathMultipleStartRequest'
 
             responses:
                 '200':
@@ -118,6 +115,29 @@ paths:
 
 components:
     schemas:
+        PathRequest:
+            type: object
+            properties:
+                courier:
+                  $ref: '#/components/schemas/Courier'
+                end-coordinate:
+                  $ref: '#/components/schemas/Coordinate'
+            required:
+                - courier
+                - end-coordinate
+        PathMultipleStartRequest:
+            type: object
+            properties:
+                couriers:
+                  type: array
+                  description: Identifier for order
+                  items:
+                      $ref: '#/components/schemas/Courier'
+                end-coordinate:
+                  $ref: '#/components/schemas/Coordinate'
+            required:
+                - couriers
+                - end-coordinate
         Coordinate:
             type: object
             properties:
@@ -141,6 +161,7 @@ components:
             properties:
                 id:
                   type: integer
+                  minimum: 0
                   description: Courier ID
                 position:
                     $ref: '#/components/schemas/Coordinate'
