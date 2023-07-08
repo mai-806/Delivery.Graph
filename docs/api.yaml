@@ -7,14 +7,14 @@ info:
 
 paths:
     /v1/path:
-        get:
+        post:
             summary: Get fastest path from start to finish
-            parameters:
-                -   name: Courier
-                    in: query
-                    required: true
-                    schema:
-                        $ref: '#/components/schemas/PathRequest'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PathRequest'
             responses:
                 '200':
                     description: Successful response
@@ -46,57 +46,57 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
-    /v2/path:
-        get:
-            summary: Get fastest path from start to finish, cost depends on time
-            parameters:
-                -   name: Courier
-                    in: query
-                    required: true
-                    schema:
-                        $ref: '#/components/schemas/V2PathRequest'
-            responses:
-                '200':
-                    description: Successful response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/PathInfo'
-                '400':
-                    description: Invalid input
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ErrorResponse'
-                '404':
-                    description: Coordinate out of map
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ErrorResponse'
-                '406':
-                    description: Not reachable from point destination
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ErrorResponse'
-                '413':
-                    description: Payload Too Large
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ErrorResponse'
-                                
-    /v1/path/multiple-couriers:
-        get:
-            summary: Get fastest path from multiple couriers to finish
-            parameters:
-                -   name: Couriers
-                    in: query
-                    required: true
-                    schema:
-                        $ref: '#/components/schemas/PathMultipleStartRequest'
 
+    /v2/path:
+        post:
+            summary: Get fastest path from start to finish, cost depends on time
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/V2PathRequest'
+            responses:
+                '200':
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PathInfo'
+                '400':
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '404':
+                    description: Coordinate out of map
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '406':
+                    description: Not reachable from point destination
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                '413':
+                    description: Payload Too Large
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+
+    /v1/path/multiple-couriers:
+        post:
+            summary: Get fastest path from multiple couriers to finish
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PathMultipleStartRequest'
             responses:
                 '200':
                     description: Successful response
@@ -130,15 +130,14 @@ paths:
                                 $ref: '#/components/schemas/ErrorResponse'
 
     /v1/point/is-available:
-        get:
+        post:
             summary: Is point available for pathfinding
-            parameters:
-                -   name: Coordinate
-                    in: query
-                    required: true
-                    schema:
-                        $ref: '#/components/schemas/Coordinate'
-
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Coordinate'
             responses:
                 '200':
                     description: Successful response
@@ -159,19 +158,20 @@ components:
             type: object
             properties:
                 courier:
-                  $ref: '#/components/schemas/Courier'
+                    $ref: '#/components/schemas/Courier'
                 end-coordinate:
-                  $ref: '#/components/schemas/Coordinate'
+                    $ref: '#/components/schemas/Coordinate'
             required:
                 - courier
                 - end-coordinate
+
         V2PathRequest:
             type: object
             properties:
                 courier:
-                  $ref: '#/components/schemas/Courier'
+                    $ref: '#/components/schemas/Courier'
                 end-coordinate:
-                  $ref: '#/components/schemas/Coordinate'
+                    $ref: '#/components/schemas/Coordinate'
                 time:
                     type: string
                     example: HH:MM:SS
@@ -180,19 +180,21 @@ components:
                 - courier
                 - end-coordinate
                 - time
+
         PathMultipleStartRequest:
             type: object
             properties:
                 couriers:
-                  type: array
-                  description: Identifier for order
-                  items:
-                      $ref: '#/components/schemas/Courier'
+                    type: array
+                    description: Identifier for order
+                    items:
+                        $ref: '#/components/schemas/Courier'
                 end-coordinate:
-                  $ref: '#/components/schemas/Coordinate'
+                    $ref: '#/components/schemas/Coordinate'
             required:
                 - couriers
                 - end-coordinate
+
         Coordinate:
             type: object
             properties:
@@ -215,9 +217,9 @@ components:
             type: object
             properties:
                 id:
-                  type: integer
-                  minimum: 0
-                  description: Courier ID
+                    type: integer
+                    minimum: 0
+                    description: Courier ID
                 position:
                     $ref: '#/components/schemas/Coordinate'
             required:
@@ -228,8 +230,8 @@ components:
             type: object
             properties:
                 courier-id:
-                  type: integer
-                  description: Courier ID
+                    type: integer
+                    description: Courier ID
                 path:
                     type: array
                     description: Path is array coordinates
@@ -251,7 +253,7 @@ components:
                 - path
                 - time
                 - cost
-        
+
         PointAvailableResponse:
             type: object
             properties:
