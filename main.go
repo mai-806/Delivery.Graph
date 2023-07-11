@@ -16,6 +16,7 @@ func main() {
 	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		http.HandleFunc("/v1/path", handlers.GetV1Path)
+		http.HandleFunc("/v2/path", handlers.GetV2Path)
 		http.HandleFunc("/v1/path/multiple_couriers", handlers.GetV1PathMultipleCouriers)
 		http.HandleFunc("/v1/point/is_available", handlers.GetV1PointIsAvailable)
 		http.HandleFunc("/v1/secret_load_database", handlers.GetV1SecretLoadDatabase)

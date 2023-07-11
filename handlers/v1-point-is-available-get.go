@@ -26,10 +26,15 @@ func GetV1PointIsAvailable(w http.ResponseWriter, r *http.Request) {
 		SendJSONResponse(w, http.StatusBadRequest, errorResponse)
 		return
 	}
+	available := false
+	vertices := lstruct.Vertices{}
+	edges := lstruct.Edges{}
+	chunks := map[lstruct.Chunk]bool{}
 
-	// Проверка принадлежности координат диапазону
-	available := coordinate.Lon >= -90 && coordinate.Lon <= 90 && coordinate.Lat >= -90 && coordinate.Lat <= 90
-
+	path, _ := findPath(coordinate, coordinate, &vertices, &edges, &chunks)
+	if path != nil {
+		available = true
+	}
 	// Создание и отправка ответа
 	response := lstruct.PointAvailableResponse{
 		Available: available,

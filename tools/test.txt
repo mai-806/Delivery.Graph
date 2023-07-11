@@ -1,0 +1,13 @@
+{
+  "courier": {
+    "id": 0,
+    "position": {
+      "lon": 37.6147,
+      "lat": 55.6322
+    }
+  },
+  "end_coordinate": {
+    "lon": 37.6587,
+    "lat": 55.8365
+  }
+}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"graph/lstruct"
 	"net/http"
+	"time"
 )
 
 func GetV1Path(w http.ResponseWriter, r *http.Request) {
@@ -31,14 +32,13 @@ func GetV1Path(w http.ResponseWriter, r *http.Request) {
 	chunks := map[lstruct.Chunk]bool{}
 
 	path, cost := findPath(pathRequest.Courier.Position, pathRequest.EndCoordinate, &vertices, &edges, &chunks)
-
-	// Создание и отправка ответа
+	rub := float64(cost * GetTimeValue(time.Now().String()) * OkladPerHour(cost) / 3600)
 	if path != nil {
 		response := lstruct.PathInfoResponse{
 			CourierID: pathRequest.Courier.ID,
 			Path:      path,
 			Time:      int(cost),
-			Cost:      cost,
+			Cost:      rub,
 		}
 		SendJSONResponse(w, http.StatusOK, response)
 	} else {

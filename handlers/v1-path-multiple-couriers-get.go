@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"graph/lstruct"
 	"net/http"
+	"time"
 )
 
 func GetV1PathMultipleCouriers(w http.ResponseWriter, r *http.Request) {
@@ -31,12 +32,13 @@ func GetV1PathMultipleCouriers(w http.ResponseWriter, r *http.Request) {
 	chunks := map[lstruct.Chunk]bool{}
 
 	path, cost, id := findClosest(pathMSRequest.Couriers, pathMSRequest.EndCoordinate, &vertices, &edges, &chunks)
+	rub := float64(cost * GetTimeValue(time.Now().String()) * OkladPerHour(cost) / 3600)
 	if path != nil {
 		response := lstruct.PathInfoResponse{
 			CourierID: id,
 			Path:      path,
 			Time:      int(cost),
-			Cost:      cost,
+			Cost:      rub,
 		}
 		SendJSONResponse(w, http.StatusOK, response)
 	} else {
